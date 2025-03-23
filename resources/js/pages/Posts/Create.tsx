@@ -1,7 +1,7 @@
 import InputError from '@/components/input-error';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -84,10 +84,15 @@ export default function PostCreate() {
                                 <InputError message={errors.content} />
                             </div>
 
-                            <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={processing}>
-                                {processing && <LoaderCircle className="animate-spin h-4 w-4" />}
-                                Log in
-                            </Button>
+                            <div className="flex">
+                                <Button type="submit" className="mt-4 w-fit" tabIndex={4} disabled={processing}>
+                                    {processing && <LoaderCircle className="animate-spin h-4 w-4" />}
+                                    Log in
+                                </Button>
+
+                                <Link href={ route('posts.index') } className="ml-3 mt-4 px-3 py-1 bg-neutral-600 hover:bg-neutral-700 text-white rounded-sm">Cancel</Link>
+                            </div>
+
                         </div>
 
 
