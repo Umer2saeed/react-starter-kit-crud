@@ -87,10 +87,10 @@ export default function PostCreate() {
                             <div className="flex">
                                 <Button type="submit" className="mt-4 w-fit" tabIndex={4} disabled={processing}>
                                     {processing && <LoaderCircle className="animate-spin h-4 w-4" />}
-                                    Log in
+                                    Create
                                 </Button>
 
-                                <Link href={ route('posts.index') } className="ml-3 mt-4 px-3 py-1 bg-neutral-600 hover:bg-neutral-700 text-white rounded-sm">Cancel</Link>
+                                <Link href={ route('posts.index') } className="ml-3 mt-4 px-3 py-2 text-sm bg-neutral-950 hover:bg-neutral-800 text-white rounded-md">Cancel</Link>
                             </div>
 
                         </div>

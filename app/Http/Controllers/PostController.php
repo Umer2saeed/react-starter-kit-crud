@@ -42,12 +42,7 @@ class PostController extends Controller
 //            $data['image'] = $name;
         }
         $request->user()->posts()->create($data);
-
         return to_route('posts.index');
-
-
-
-
     }
 
     public function edit(Post $post)
@@ -59,10 +54,28 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
-        $request->validate([
+        $data = $request->validate([
             'title' => 'required',
-            'content' => 'required'
+            'content' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        $data['slug'] = str($data['title'])->slug();
+        $data['image'] = $post->image;
+
+        if ($request->hasFile('image'))
+        {
+            Storage::disk('public')->delete($post->image);
+            $data['image'] = Storage::disk('public')->put('posts', $request->file('image'));
+//            $image = $request->file('image');
+//            $name = time().'.'.$image->getClientOriginalExtension();
+//            $destinationPath = public_path('/images');
+//            $image->move($destinationPath, $name);
+//            $data['image'] = $name;
+        }
+        $post->update($data);
+        return to_route('posts.index');
+
     }
 
     public function destroy(Post $post)

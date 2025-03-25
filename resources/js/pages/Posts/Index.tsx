@@ -31,7 +31,7 @@ export default function PostIndex({ posts }: { posts: Post[] }) {
             <Head title="Posts" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="flex justify-end">
-                    <Link href={route('posts.create')} className="px-3 py-1 bg-neutral-600 hover:bg-neutral-700 text-white rounded-sm">Create Post</Link>
+                    <Link href={route('posts.create')} className="px-3 py-1 bg-neutral-600 hover:bg-neutral-700 text-white rounded-sm text-sm">Create Post</Link>
                 </div>
 
                 <div className="p-4 border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
@@ -57,7 +57,10 @@ export default function PostIndex({ posts }: { posts: Post[] }) {
                                     <TableCell>{post.title}</TableCell>
                                     <TableCell>{post.content}</TableCell>
                                     <TableCell>{post.created_at}</TableCell>
-                                    <TableCell className="text-right">Edit/Delete</TableCell>
+                                    <TableCell className="text-right">
+                                        <Link href={ route('posts.edit', post.id) } className="text-indigo-500 underline">Edit</Link>
+                                        <Link href={ route('posts.destroy', post.id) } className="ml-1 text-indigo-500 underline">Delete</Link>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
