@@ -23,6 +23,7 @@ type PostForm = {
     image: File | null;
 };
 export default function PostCreate() {
+    const [imagePreview, setImagePreview] = React.useState<string | null>(null);
     const { data, setData, post, processing, errors } = useForm<PostForm>({
         title: '',
         content: '',
@@ -33,6 +34,7 @@ export default function PostCreate() {
         const file = e.target.files?.[0];
         if (file) {
             setData('image', file);
+            setImagePreview(URL.createObjectURL(file));
         }
     }
 
@@ -40,7 +42,6 @@ export default function PostCreate() {
         e.preventDefault();
         post(route('posts.store'));
     };
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Post Create" />
@@ -67,6 +68,7 @@ export default function PostCreate() {
                                     type="file"
                                     onChange={handleFileChange}
                                 />
+                                {imagePreview && <img src={imagePreview} alt="Image Preview" className="h-20 w-20 rounded-md object-cover" />}
                                 <InputError message={errors.image} />
                             </div>
 

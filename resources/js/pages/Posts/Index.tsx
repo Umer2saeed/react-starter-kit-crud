@@ -9,7 +9,10 @@ import {
 } from "@/components/ui/table"
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { toast } from "sonner";
+import { useEffect } from 'react';
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -25,7 +28,20 @@ interface Post {
     image: string;
     created_at: string;
 }
+
+interface Flash {
+    success?: string;
+    danger?: string;
+}
 export default function PostIndex({ posts }: { posts: Post[] }) {
+
+    const { flash } = usePage<{flash: Flash}>().props;
+
+    useEffect(() => {
+        if (flash.success) {
+            toast.success(flash.success);
+        }
+    }, [flash.success]);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Posts" />
@@ -52,14 +68,14 @@ export default function PostIndex({ posts }: { posts: Post[] }) {
                                 <TableRow>
                                     <TableCell className="font-medium">{post.id}</TableCell>
                                     <TableCell>
-                                        <img src={'/storage/' +  post.image } alt={post.title} className="h-10 w-10 rounded-full object-cover"/>
+                                        <img src={ post.image } alt={post.title} className="h-10 w-10 rounded-full object-cover"/>
                                     </TableCell>
                                     <TableCell>{post.title}</TableCell>
                                     <TableCell>{post.content}</TableCell>
                                     <TableCell>{post.created_at}</TableCell>
                                     <TableCell className="text-right">
                                         <Link href={ route('posts.edit', post.id) } className="text-indigo-500 underline">Edit</Link>
-                                        <Link href={ route('posts.destroy', post.id) } className="ml-1 text-indigo-500 underline">Delete</Link>
+                                        <Link href={ route('posts.destroy', post.id) } method='delete' className="ml-1 text-red-600 underline">Delete</Link>
                                     </TableCell>
                                 </TableRow>
                             ))}

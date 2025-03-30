@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -9,11 +10,11 @@ use Inertia\Inertia;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::all();
+        $posts = $request->user()->posts()->get();
         return Inertia::render('Posts/Index', [
-            'posts' => $posts
+            'posts' => PostResource::collection($posts)
         ]);
     }
 
@@ -42,13 +43,13 @@ class PostController extends Controller
 //            $data['image'] = $name;
         }
         $request->user()->posts()->create($data);
-        return to_route('posts.index');
+        return to_route('posts.index')->with('success', 'Post Created Successfully!');
     }
 
     public function edit(Post $post)
     {
         return Inertia::render('Posts/Edit', [
-            'post' => $post
+            'post' => new PostResource($post)
         ]);
     }
 
@@ -74,13 +75,15 @@ class PostController extends Controller
 //            $data['image'] = $name;
         }
         $post->update($data);
-        return to_route('posts.index');
+        return to_route('posts.index')->with('success', 'Post Updated Successfully!');
 
     }
 
     public function destroy(Post $post)
     {
-
+        Storage::disk('public')->delete($post->image);
+        $post->delete();
+        return to_route('posts.index')->with('success', 'Post Deleted Successfully!');
     }
 
 }

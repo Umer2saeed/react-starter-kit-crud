@@ -44,44 +44,31 @@ export default function PostEdit({post}: { post: Post }) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Post Update" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-                <div className="p-4 border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
+                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border p-4 md:min-h-min">
                     <form className="flex flex-col gap-6" onSubmit={submit}>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="email">Title</Label>
-                                <Input
-                                    id="title"
-                                    type="text"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                    placeholder="Enter Title"
-                                />
+                                <Input id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Enter Title" />
                                 <InputError message={errors.title} />
                             </div>
 
                             <div className="grid gap-2">
                                 <Label htmlFor="image">Image</Label>
-                                <Input
-                                    id="image"
-                                    type="file"
-                                    onChange={handleFileChange}
-                                />
-                                {imagePreview && <img src={imagePreview} alt="Image Preview" className="h-10 w-10 rounded-full object-cover" />}
+                                <Input id="image" type="file" onChange={handleFileChange} />
+                                <div className="flex gap-2">
+                                    <img src={post.image} alt={post.title} className={"h-20 w-20 rounded-md object-cover" + (imagePreview ? 'opacity-30' : '')} />
+                                    {imagePreview && <img src={imagePreview} alt="Image Preview" className="h-20 w-20 rounded-md object-cover" />}
+                                </div>
 
                                 <InputError message={errors.image} />
                             </div>
-
 
                             <div className="grid gap-2">
                                 <div className="flex items-center">
                                     <Label htmlFor="content">Content</Label>
                                 </div>
-                                <Textarea
-                                    id="content"
-                                    value={content}
-                                    onChange={(e) => setContent(e.target.value)}
-                                    placeholder="Enter Content"
-                                />
+                                <Textarea id="content" value={content} onChange={(e) => setContent(e.target.value)} placeholder="Enter Content" />
                                 <InputError message={errors.content} />
                             </div>
 
@@ -90,12 +77,14 @@ export default function PostEdit({post}: { post: Post }) {
                                     Update
                                 </Button>
 
-                                <Link href={ route('posts.index') } className="ml-3 mt-4 px-3 py-2 text-sm bg-neutral-950 hover:bg-neutral-800 text-white rounded-md">Cancel</Link>
+                                <Link
+                                    href={route('posts.index')}
+                                    className="mt-4 ml-3 rounded-md bg-neutral-950 px-3 py-2 text-sm text-white hover:bg-neutral-800"
+                                >
+                                    Cancel
+                                </Link>
                             </div>
-
                         </div>
-
-
                     </form>
                 </div>
             </div>
