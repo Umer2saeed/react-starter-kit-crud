@@ -1,7 +1,7 @@
 import InputError from '@/components/input-error';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -23,6 +23,7 @@ type PostForm = {
     image: File | null;
 };
 export default function PostCreate() {
+    const [imagePreview, setImagePreview] = React.useState<string | null>(null);
     const { data, setData, post, processing, errors } = useForm<PostForm>({
         title: '',
         content: '',
@@ -33,6 +34,7 @@ export default function PostCreate() {
         const file = e.target.files?.[0];
         if (file) {
             setData('image', file);
+            setImagePreview(URL.createObjectURL(file));
         }
     }
 
@@ -40,7 +42,6 @@ export default function PostCreate() {
         e.preventDefault();
         post(route('posts.store'));
     };
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Post Create" />
@@ -67,6 +68,7 @@ export default function PostCreate() {
                                     type="file"
                                     onChange={handleFileChange}
                                 />
+                                {imagePreview && <img src={imagePreview} alt="Image Preview" className="h-20 w-20 rounded-md object-cover" />}
                                 <InputError message={errors.image} />
                             </div>
 
@@ -84,10 +86,15 @@ export default function PostCreate() {
                                 <InputError message={errors.content} />
                             </div>
 
-                            <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={processing}>
-                                {processing && <LoaderCircle className="animate-spin h-4 w-4" />}
-                                Log in
-                            </Button>
+                            <div className="flex">
+                                <Button type="submit" className="mt-4 w-fit" tabIndex={4} disabled={processing}>
+                                    {processing && <LoaderCircle className="animate-spin h-4 w-4" />}
+                                    Create
+                                </Button>
+
+                                <Link href={ route('posts.index') } className="ml-3 mt-4 px-3 py-2 text-sm bg-neutral-950 hover:bg-neutral-800 text-white rounded-md">Cancel</Link>
+                            </div>
+
                         </div>
 
 
